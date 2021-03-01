@@ -1,0 +1,198 @@
+{% extends "public/templates/public_template.html" %}
+{% block style %}
+table, th, td {
+	border: 1px solid rgb(218, 217, 217);
+	border-collapse: collapse;
+}
+table, th {
+	padding: 10px;
+}
+th, td {
+	text-align: center;
+	vertical-align: middle;
+  color: #333333
+}
+table{
+  margin-top:30px;
+  margin-bottom:20px;
+}
+{% endblock %}
+{% block title %}Home{% endblock %}
+
+{% block main %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.bundle.min.js"></script>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Progress</h1>
+		<div id = progress_head>
+			<p>Child Name: {{ child }} </p>
+			<p>Worksheet: {{ worksheet }} </p>
+			{% if tmin == 0 %}
+				<p>Target Time: {{tsec}} seconds</p>
+			{% elif tmin == 1 %}
+				{% if tsec == 0 %}
+					<p>Target Time: 1 minute </p>
+				{% else %}
+					<p>Target Time: 1 minute {{tsec}} seconds</p>
+				{% endif %}
+			{% else %}
+				{% if tsec == 0 %}
+					<p>Target Time: {{ tmin }} minutes </p>
+				{% else %}
+					<p>Target Time: {{ tmin }} minutes {{tsec}} seconds</p>
+				{% endif %}
+			{% endif %}
+		</div>
+        {% if current_user.is_authenticated %}
+          {% if mobile %}
+			<div id = graph_m>
+				<div class="chart-container" style="position: relative; width:90vw">
+					<canvas id="sample-chart" responsive = True></canvas>
+				</div>
+			</div>
+			<div id = study_history class = study_history_m>
+				<table id = history class = history>
+					<tr class = thead>
+						<th> Date</th><th>Number of Mistakes</th><th>Minutes</th><th>Seconds</th>
+					</tr>
+					{% for x in plot_data %}
+                        <tr>
+							<td>{{ x[0] }}</td><td>{{ x[1]}}</td><td>{{ x[2]}}</td><td>{{ x[3]}}</td>
+						</tr>
+                    {% endfor %}
+				</table>
+			</div>
+		  				
+            <h4>1st Step: <a href="{{ url_for ('scan') }}">Scan a Worksheet</a></h4>
+			<ul hidden id = plot_data>
+				{% for x in plot_data %}
+					<li>{{x}}</li>
+				{% endfor %}
+			</ul> 
+			<p hidden id = form_time> {{ form_time}} </p>
+          {% else %}
+		  	<div id = graph_d>
+				<div class="chart-container" style="position: relative; width:90vw">
+					<canvas id="sample-chart" responsive = "True" maintainAspectRatio = "True"></canvas>
+				</div>
+			</div>
+			<div id = study_history class = study_history_d>
+				<table id = history class = history>
+					<tr class = thead>
+						<th> Date</th><th>Number of Mistakes</th><th>Minutes</th><th>Seconds</th>
+					</tr>
+					{% for x in plot_data %}
+                        <tr>
+							<td>{{ x[0] }}</td><td>{{ x[1]}}</td><td>{{ x[2]}}</td><td>{{ x[3]}}</td>
+						</tr>
+                    {% endfor %}
+				</table>
+			</div>
+            <h4>1st Step: <a href="{{ url_for ('testdate') }}">Set Test Date</a></h4>
+            <h4>2nd Step: <a href="{{ url_for ('upload_files') }}">Upload Scanned Worksheets</a></h4>
+          {% endif %}  
+		  <ul hidden id = plot_data>
+			{% for x in plot_data %}
+				<li>{{ x[0] }},{{ x[1] }},{{ x[2] }},{{ x[3] }}</li>
+			{% endfor %}
+			</ul> 
+			<p hidden id = minutes> {{ tmin}}</p>
+			<p hidden id = seconds> {{ tsec}}</p>
+        {% else %}
+          Please login to the system
+          <a href="{{ url_for ('login') }}">Login</a> </br>
+          If you do not have our account, please register
+          <a class="nav-item nav-link" href="{{ url_for ('register') }}">Register</a>
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    var chartChart = document.getElementById("sample-chart");
+    var plot_data = document.getElementById("plot_data");
+    var plist = plot_data.getElementsByTagName('li');
+    var tmin = document.getElementById("minutes").innerText;
+	var tsec = document.getElementById("seconds").innerText;
+    console.log("plot_data: ",plist);
+    console.log("minutes: ",tmin, " seconds: ", tsec);
+    var i;
+    var data = [];
+    for (i = 0; i < plist.length; i++) {
+      var x = plist[i].innerHTML;
+	    console.log(x);
+      var x = x.split(',');
+      var y = {x: parseInt(x[1]), y: parseInt(parseInt(x[2])*60+parseInt(x[3]))};
+      console.log(y);
+      data.push(y);
+    };
+
+    sec = parseInt(tmin*60 + tsec);
+    var goal = {x:0, y: sec};
+    console.log("Goal: ", goal);
+
+    console.log("plot: ", data);
+
+    var chartChart = document.getElementById("sample-chart");
+    new Chart(chartChart, {
+        type: 'scatter',
+        data: {
+            //labels: ["5", "4"],
+            datasets: [{
+                data: data,
+//                data: [{x:5, y:180},{x:3, y:150},{x:2,y:120}],
+                backgroundColor: 'rgb(132, 99, 255)',
+                label: 'Progress'
+            },
+            {
+                data: [goal],
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                borderWidth:3,
+                radius: 10,
+                pointStyle:'star',
+                label: 'Goal'
+                }]
+        },
+        options: {
+          maintainAspectRatio: true,
+          layout: {
+            padding: {
+                left: 20,
+                right: 20,
+                top: 0,
+                bottom: 0
+            }
+          },
+            scales: {
+                xAxes: [{
+                  type: 'linear',
+                  position: 'bottom',
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Number of Mistakes',
+                  },
+                  ticks: {
+                    reverse:true,
+                    stepSize: 1
+                  }
+                    }],
+                yAxes: [{
+                  ticks:{
+                    reverse: true
+                  },
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Seconds'
+                  }
+                }]
+            }
+        }
+    });
+</script>
+{% endblock %}

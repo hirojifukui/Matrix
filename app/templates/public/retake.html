@@ -1,0 +1,39 @@
+{% extends "public/templates/public_template.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block main %}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Please retake the photo</h1>
+        {% if current_user.is_authenticated %}
+            <p>System was not able to process the photo properly. </p>
+            <p>When you take a photo of the worksheet, please ensure the following points.
+                <ul>
+                    <li>Take a photo of entire worksheet including small patterns. </li>
+                    <li>Please avoid strong shadows.</li>
+                    <li>Please try to take a photo with minimum skeuw.</li>
+                </ul> </p>
+            <h4><a href="{{ url_for ('home') }}">Back to Home</a></h4>
+
+        {% else %}
+          Please login to the system
+          <a href="{{ url_for ('login') }}">Login</a> </br>
+          If you do not have our account, please register
+          <a class="nav-item nav-link" href="{{ url_for ('register') }}">Register</a>
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    const fileInput = document.getElementById('file-input');
+  
+  fileInput.addEventListener('change', (e) => document.getElementById("myForm").submit(););
+</script>
+{% endblock %}

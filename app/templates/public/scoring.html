@@ -1,0 +1,415 @@
+{% extends "public/templates/public_template.html" %}
+{% block style %}
+<style type="text/css">
+    body {
+      background-color: linen;
+      margin:0;
+    }
+    
+    h1 {
+      color: maroon;
+      margin-left: 40px;
+    }
+    .top_margine {
+        margin: 50px, 0px, 0px, 0px;
+    }
+    .main_image {
+        width: 960px;
+        height: 720px;
+    }
+    .a1 {
+        position: absolute;
+        top:198px;
+        left:133px;
+    }
+    .box_g {
+        background-color: green;
+        opacity: 0.5;
+        width: 76px;
+        height: 48px;
+    }
+    table, tr, th, td {
+        border: 1px;
+        color: gray
+    }
+    table, th {
+	    padding: 10px;
+    }
+    th {
+	    text-align: center;
+	    vertical-align: middle;
+        color: #333333;
+    }
+    table{
+    margin-top:30px;
+    margin-bottom:20px;
+    }
+    .tbl_ans{
+	    text-align: right;
+	    vertical-align: middle;
+        color: #333333;
+        font-size: 14px;
+    }
+    .tbl_img{
+	    text-align: left;
+	    vertical-align: middle;
+        color: #333333;
+        font-size: 14px;
+    }
+    #time, #mistake, #time, #minutes, #seconds, #submit{
+        padding:10px;
+    }
+    p{
+        margin-left: 10px;
+        margin-right: 10px;
+        padding:10px;
+        vertical-align: middle;
+    }
+    #time {
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+{% block title %}Scoring{% endblock %}
+
+{% block main %}
+<div class ="content-section" id = "content" style="padding: 10px; margin-top: 56px;">
+    <div id = top_margine>
+        <div id = "area"></div>
+        <div id = "mistake"></div>
+        <div id = "time" class ="container">
+            <div class = "row">
+            <!--    <div class ="col-sm">  -->
+                    <select name="minutes" id ="minutes">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        <option value="32">32</option>
+                        <option value="33">33</option>
+                        <option value="34">34</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                        <option value="37">37</option>
+                        <option value="38">38</option>
+                        <option value="39">39</option>
+                        <option value="40">40</option>
+                        <option value="41">41</option>
+                        <option value="42">42</option>
+                        <option value="43">43</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                        <option value="47">47</option>
+                        <option value="48">48</option>
+                        <option value="49">49</option>
+                        <option value="50">50</option>
+                        <option value="51">51</option>
+                        <option value="52">52</option>
+                        <option value="53">53</option>
+                        <option value="54">54</option>
+                        <option value="55">55</option>
+                        <option value="56">56</option>
+                        <option value="57">57</option>
+                        <option value="58">58</option>
+                        <option value="59">59</option>
+                    </select>
+                    <P>Minute(s)</P>
+                <!--</div>
+                <div class ="col-sm"> -->
+                    <select name="seconds" id ="seconds">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        <option value="32">32</option>
+                        <option value="33">33</option>
+                        <option value="34">34</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                        <option value="37">37</option>
+                        <option value="38">38</option>
+                        <option value="39">39</option>
+                        <option value="40">40</option>
+                        <option value="41">41</option>
+                        <option value="42">42</option>
+                        <option value="43">43</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                        <option value="47">47</option>
+                        <option value="48">48</option>
+                        <option value="49">49</option>
+                        <option value="50">50</option>
+                        <option value="51">51</option>
+                        <option value="52">52</option>
+                        <option value="53">53</option>
+                        <option value="54">54</option>
+                        <option value="55">55</option>
+                        <option value="56">56</option>
+                        <option value="57">57</option>
+                        <option value="58">58</option>
+                        <option value="59">59</option>
+                    </select>
+                    <P>Second(s)</P>
+                <!-- </div> -->
+            </div>
+        </div>
+        <!-- <div id = "child_section">
+            <p>Registered Child</p>
+                {% if children %}
+                    {% if child_num == 0 %}
+                        <p><strong>No child registered</strong></p>	
+                        <a class="" href="{{ url_for ('add_child') }}">Register a child</a>
+                    {% endif %}
+                    {% if child_num == 1 %}
+                        <p value = "{{ child.cid }}">{{ child.cfirst}} {{ child.clast}}</p>
+                    {% else %}
+                        <select name="child" id ="child">
+                        {% for child in children %}
+                            <option value = "{{ child.cid }}" id = "cname">{{ child.cfirst}} {{ child.clast}} </option>
+                        {% endfor %}
+                        </select>
+                    {% endif %}    
+                {% else %}
+                    <p><strong>No child registered</strong></p>	
+                    <a class="" href="{{ url_for ('add_child') }}">Register a child</a>
+                {% endif %}
+        </div> -->
+        <div id = submit>
+            <button type="button" class="btn btn-primary" onclick ="button_click('End')">Submit</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    var txt = "";
+    var v_margin = 60;
+    var h, h2, cell_height, cell_width, cell_rows, cell_cols, cells, eval_data;
+    h = h2 = cell_height = cell_width = cell_rows = cell_cols = 0; m=0;
+
+    window.onload = function() {
+        document.getElementById('main').innerHTML = "<main></main>";
+        console.log(`JS onload`)
+        var res = {"action": "JSON"};
+        console.log(`submit confirmation`);
+        fetch(`${window.origin}/api`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(res),
+            cache: "no-cache",
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        })
+        .then(function (response) {
+            if (response.status !== 200) {
+                console.log(`Response status was not 200: ${response.status}`);
+                return;
+            }
+            response.json().then(function(data) {
+                console.log("Received data[evali]: ", data["eval"]);
+                eval_data = data["eval"];
+                document.getElementById('content').style = "padding: 0px; margin-top: 56px";
+                rendering(data);
+            })
+        })
+    }
+    
+    function rendering(data) {
+        //console.log(data)
+        // print(data.path)
+        // document.getElementById('area').innerHTML = '<img src=' + String(data.path) + '>'
+        // + '<div id ="loop"></div>'
+        var bc = "";
+        cell_height = parseInt(data.eval.eval[0]["row_h"]);
+        cell_width = parseInt(data.eval.eval[0]["col_w"]);
+        cell_rows = data.eval.eval[0]["row"];
+        cell_cols = data.eval.eval[0]["col"];
+        cells = data.eval.eval[0]["eval_cells"];
+        txt = '<table class=\"table\"><tr class=\"table_header\"><th class=\"tbl_header_ans\">Answer</th><th class=\"tbl_header_img\">Image</th></tr>';
+        data.eval.eval.forEach(element => {
+            cells.forEach(cellFunction);
+            txt = txt + "</table>"
+            // arrows(data.total_files, data.number_of_file);
+            document.getElementById('area').innerHTML = txt;
+            number_of_mistakes();
+        })
+        return;
+    }
+
+    function cellFunction(value, index, array){
+        h = v_margin + parseInt(value.upper_y);
+        h2 = v_margin + parseInt(value.upper_y) + 20;
+        g = 0
+        r = parseInt(value.row)
+        c = parseInt(value.col)
+        //console.log("row ",parseInt(value.row), "col",parseInt(value.col));
+        //console.log("eval_data.eval ", eval_data.eval, "eval_data.eval[0] ",eval_data.eval[0]);
+        cell_id = r*9+c;
+
+        txt = txt + "<tr class=\"tbl_row\"><td id = a" + String(cell_id) + " class=\"tbl_ans\">" + String(value.answer) + "</td><td id = " 
+            + String(cell_id) + " class=\"tbl_img\" style = \"background-color: " + String(value.color) 
+        if (String(value.color) == "white"){
+            txt = txt + "; opacity: 1"
+        } else {
+            txt = txt + "; opacity: 0.3"
+        }
+        txt = txt + "; z-index: 50;\" " + "onclick=\"cell_click('" + cell_id + "')\"><img class = \"\" src=\"" + "/static/img/upload/" 
+            + String(eval_data.user) + "/" + String(eval_data.date) + "/unnamed/" + 
+           String(g) + "-" + String(r) + "-" + String(c) + ".png\"></td></tr>";
+         //   txt = txt + "<tr><th scope=\"row\">" + String(value.answer) + "</th><td style = \"background-color: " + String(value.color) + "; opacity: 0.3; z-index: 50;\" " 
+         //   + "onclick=\"cell_click('" + String(value.row) + String(value.col) + "')\"><img " 
+         //   + String(data.path) + "/" + String(g) + "-" + String(r) + "-" + String(c) + ".png></td></tr>";
+    }
+
+    function cell_click(id){
+        // console.log(id);
+        //r = Math.floor(parseInt(id)/9);
+        //c = parseInt(id)%9;
+        cid = Number(id);
+        id_ans = "a"+String(id);
+        if (document.getElementById(id).style.backgroundColor == "pink"){
+            document.getElementById(id).style.backgroundColor="white";
+            document.getElementById(id).style.opacity="1";
+            document.getElementById(id_ans).innerText = String(eval_data.eval[0].eval_cells[cid]["answer"])
+            eval_data.eval[0].eval_cells[cid]["color"]="white";
+            eval_data.eval[0].eval_cells[cid]["correct"]=true;
+            // cells[r*9+c]["miss_recog"] = false;
+        }else if (document.getElementById(id).style.backgroundColor == "white"){
+            document.getElementById(id).style.backgroundColor="pink";
+            document.getElementById(id).style.opacity="0.3";
+            document.getElementById(id_ans).innerText = "Row: " + String(eval_data.eval[0].eval_cells[cid]["row"] + 1) + ", column: " 
+            + String(eval_data.eval[0].eval_cells[cid]["col"] + 1) 
+            + ", " + eval_data.eval[0].eval_cells[cid]["op"] + " = " + String(eval_data.eval[0].eval_cells[cid]["answer"]);
+            eval_data.eval[0].eval_cells[cid]["color"]="pink";
+            eval_data.eval[0].eval_cells[cid]["correct"]=false;
+            // cells[r*9+c]["miss_recog"] = true;
+        }
+        number_of_mistakes();
+    }
+
+    function number_of_mistakes(){
+        m = 0;
+        // console.log("number of mistakes", m, "Cells ",eval_data.eval[0].eval_cells );
+        for (i in eval_data.eval[0].eval_cells){
+            if (eval_data.eval[0].eval_cells[i]["color"]=="pink"){
+                m += 1;
+                // console.log("number of mistakes", m, "Cell color ",eval_data.eval[0].eval_cells[i]["color"] );
+            }
+        };
+        txt2 = "<div id = \"m\" >Number of Mistakes: " + String(m) + "</div>";
+        document.getElementById("mistake").innerHTML = txt2;
+    }
+
+    function rendering_endpage(data){
+        window.location.href = "progress";
+        return
+    }
+
+    function button_click(action){
+        // console.log("Cells: ",cells)
+        // eval_data.eval[0]["eval"] = cells;
+        eval_data["reviewed"]=true;
+        eval_data["mistakes"]=m;
+        eval_data["child"] = $("#child").val();
+        //eval_data["child"] = document.getElementById("child").selectedIndex;
+        eval_data["child_name"] = document.getElementById("cname");
+        eval_data["minutes"] = $("#minutes").val();
+        eval_data["seconds"] = $("#seconds").val();
+        if (parseInt(eval_data["minutes"]) == 0 && parseInt(eval_data["seconds"]) == 0) {
+            document.getElementById("alert").innerHTML = "<strong> Please enter approriate time </strong>";
+        } else {
+        var res = {"action": action, "data": eval_data};
+        //console.log("action", action, "data", eval_data);
+        fetch(`/api`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(res),
+        cache: "no-cache",
+        headers: new Headers({
+            "content-type": "application/json",
+            "accept": "application/json"
+            })
+        })
+        .then(function (response) {
+        if (response.status !== 200) {
+            console.log(`Response status was not 200: ${response.status}`);
+            return;
+        }
+        response.json().then(function(data) {
+            console.log("type", data["type"], "Data ", data);
+            if (data["type"] == "eval"){
+                eval_data = data["eval"];
+                rendering(data);
+            } else {
+                rendering_endpage(data);
+            }
+                      
+            })
+        })
+        }   
+    }
+
+</script>
+
+{% endblock %}
