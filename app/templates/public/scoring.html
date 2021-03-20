@@ -33,7 +33,7 @@
         color: gray
     }
     table, th {
-	    padding: 10px;
+	    padding: 5px;
     }
     th {
 	    text-align: center;
@@ -41,20 +41,30 @@
         color: #333333;
     }
     table{
-    margin-top:30px;
+    margin-top:20px;
     margin-bottom:20px;
+    table-layout: fixed;
     }
     .tbl_ans{
 	    text-align: right;
 	    vertical-align: middle;
         color: #333333;
         font-size: 14px;
+        width: 50%;
     }
     .tbl_img{
 	    text-align: left;
 	    vertical-align: middle;
         color: #333333;
         font-size: 14px;
+        width: 50%;
+    }
+    .table td{
+	    vertical-align: middle;
+        color: #333333;
+        font-size: 24px;
+        padding: 0.5rem;
+        width: 50%;
     }
     #time, #mistake, #time, #minutes, #seconds, #submit{
         padding:10px;
@@ -77,6 +87,7 @@
     <div id = top_margine>
         <div id = "area"></div>
         <div id = "mistake"></div>
+        <div id = "alert" style = "color: red; padding: 10 px;"></div>
         <div id = "time" class ="container">
             <div class = "row">
             <!--    <div class ="col-sm">  -->
@@ -211,27 +222,7 @@
                 <!-- </div> -->
             </div>
         </div>
-        <!-- <div id = "child_section">
-            <p>Registered Child</p>
-                {% if children %}
-                    {% if child_num == 0 %}
-                        <p><strong>No child registered</strong></p>	
-                        <a class="" href="{{ url_for ('add_child') }}">Register a child</a>
-                    {% endif %}
-                    {% if child_num == 1 %}
-                        <p value = "{{ child.cid }}">{{ child.cfirst}} {{ child.clast}}</p>
-                    {% else %}
-                        <select name="child" id ="child">
-                        {% for child in children %}
-                            <option value = "{{ child.cid }}" id = "cname">{{ child.cfirst}} {{ child.clast}} </option>
-                        {% endfor %}
-                        </select>
-                    {% endif %}    
-                {% else %}
-                    <p><strong>No child registered</strong></p>	
-                    <a class="" href="{{ url_for ('add_child') }}">Register a child</a>
-                {% endif %}
-        </div> -->
+
         <div id = submit>
             <button type="button" class="btn btn-primary" onclick ="button_click('End')">Submit</button>
         </div>
@@ -245,7 +236,7 @@
     var txt = "";
     var v_margin = 60;
     var h, h2, cell_height, cell_width, cell_rows, cell_cols, cells, eval_data;
-    h = h2 = cell_height = cell_width = cell_rows = cell_cols = 0; m=0;
+    h = h2 = cell_height = cell_width = cell_rows = cell_cols = 0; m=0; 
 
     window.onload = function() {
         document.getElementById('main').innerHTML = "<main></main>";
@@ -300,9 +291,10 @@
     function cellFunction(value, index, array){
         h = v_margin + parseInt(value.upper_y);
         h2 = v_margin + parseInt(value.upper_y) + 20;
-        g = 0
-        r = parseInt(value.row)
-        c = parseInt(value.col)
+        g = 0;
+        r = parseInt(value.row);
+        c = parseInt(value.col);
+        f = eval_data.image.slice(0,-4);
         //console.log("row ",parseInt(value.row), "col",parseInt(value.col));
         //console.log("eval_data.eval ", eval_data.eval, "eval_data.eval[0] ",eval_data.eval[0]);
         cell_id = r*9+c;
@@ -314,8 +306,8 @@
         } else {
             txt = txt + "; opacity: 0.3"
         }
-        txt = txt + "; z-index: 50;\" " + "onclick=\"cell_click('" + cell_id + "')\"><img class = \"\" src=\"" + "/static/img/upload/" 
-            + String(eval_data.user) + "/" + String(eval_data.date) + "/unnamed/" + 
+        txt = txt + "; z-index: 50;\" " + "onclick=\"cell_click(" + cell_id + ")\"><img class = \"\" src=\"" + "/static/img/upload/" 
+            + String(eval_data.user) + "/" + String(eval_data.date) + "/" + String(f) + "/" +
            String(g) + "-" + String(r) + "-" + String(c) + ".png\"></td></tr>";
          //   txt = txt + "<tr><th scope=\"row\">" + String(value.answer) + "</th><td style = \"background-color: " + String(value.color) + "; opacity: 0.3; z-index: 50;\" " 
          //   + "onclick=\"cell_click('" + String(value.row) + String(value.col) + "')\"><img " 
@@ -331,6 +323,7 @@
         if (document.getElementById(id).style.backgroundColor == "pink"){
             document.getElementById(id).style.backgroundColor="white";
             document.getElementById(id).style.opacity="1";
+            document.getElementById(id_ans).style.fontSize="24px";
             document.getElementById(id_ans).innerText = String(eval_data.eval[0].eval_cells[cid]["answer"])
             eval_data.eval[0].eval_cells[cid]["color"]="white";
             eval_data.eval[0].eval_cells[cid]["correct"]=true;
@@ -338,6 +331,7 @@
         }else if (document.getElementById(id).style.backgroundColor == "white"){
             document.getElementById(id).style.backgroundColor="pink";
             document.getElementById(id).style.opacity="0.3";
+            document.getElementById(id_ans).style.fontSize="14px";
             document.getElementById(id_ans).innerText = "Row: " + String(eval_data.eval[0].eval_cells[cid]["row"] + 1) + ", column: " 
             + String(eval_data.eval[0].eval_cells[cid]["col"] + 1) 
             + ", " + eval_data.eval[0].eval_cells[cid]["op"] + " = " + String(eval_data.eval[0].eval_cells[cid]["answer"]);

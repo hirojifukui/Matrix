@@ -1,5 +1,18 @@
 {% extends "public/templates/public_template.html" %}
-
+{% block style %}
+<style type="text/css">
+  body {
+    background-color: linen;
+    margin:0;
+  }
+  
+  h4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+  }
+</style>
+{% endblock %}
 {% block title %}Home{% endblock %}
 
 {% block main %}
@@ -7,22 +20,19 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h1>Home</h1>
+      <img src = "static/img/header.png" alt="A header image" width = 100%></br>
         {% if current_user.is_authenticated %}
-          {% if mobile %}
-            <h4>1st Step: <a href="{{ url_for ('scan') }}">Scan a Worksheet</a></h4>
+          {% if mobile == 'iOS' %}
+            <h4><a href="{{ url_for ('scan') }}">Scan a Worksheet</a></h4>
+          {% elif mobile == 'Android' %}
+            <h4><a href="{{ url_for ('scan') }}">Scan a Worksheet</a></h4>
           {% else %}
-            <h4>1st Step: <a href="{{ url_for ('testdate') }}">Set Test Date</a></h4>
-            <h4>2nd Step: <a href="{{ url_for ('upload_files') }}">Upload Scanned Worksheets</a></h4>
-            <h4>3rd Step: Analyze Worksheets</h4>
-            <h4>4th Step: Check the Worksheets</h4>
+            <h4><a href="{{ url_for ('testdate') }}">Score a worksheet</a></h4>
           {% endif %}  
         {% else %}
-          Please login to the system
-          <a href="{{ url_for ('login') }}">Login</a> </br>
-          If you do not have our account, please register
-          <a class="nav-item nav-link" href="{{ url_for ('register') }}">Register</a>
-        {% endif %}
+          <h4>Please <a href="{{ url_for ('login') }}">login</a></h4>
+          <h4>Create your<a href="{{ url_for ('register') }}"> free account</a></h4>
+          {% endif %}
     </div>
   </div>
 </div>

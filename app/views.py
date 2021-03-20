@@ -8,6 +8,7 @@ from app.forms import (LoginForm, RegistrationForm, UpdateAccountForm, ChildForm
 from app.models import User
 from datetime import datetime
 from flask_login import login_user, current_user, logout_user, login_required
+from is_safe_url import is_safe_url
 from flask_mail import Message
 from werkzeug.utils import secure_filename
 from pyzbar.pyzbar import decode
@@ -43,16 +44,32 @@ def index():
 	headers = requests.utils.default_headers()
 	ua = parse(headers['User-Agent'])
 	print (ua.os.family)
+	if current_user.is_authenticated:
+		children = find_child(current_user.id)
+		#print("Children", children)
+		child_num = len(children)
+		if child_num == 0:
+			return render_template("public/add_child.html", form = form)
 	if ua.os.family == 'iOS' or 'Android':
 		mobile = True
-	return render_template("public/index.html", mobile = mobile)
+	else: 
+		mobile = False
+	return render_template("public/index.html", mobile = ua.os.family)
 
 @app.route("/home")
 def home():
 	headers = requests.utils.default_headers()
 	ua = parse(headers['User-Agent'])
+	if current_user.is_authenticated:
+		children = find_child(current_user.id)
+		#print("Children", children)
+		child_num = len(children)
+		if child_num == 0:
+			return render_template("public/add_child.html", form = form)
 	if ua.os.family == 'iOS' or 'Android':
 		mobile = True
+	else:
+		mobile = False
 	return render_template("public/index.html", mobile = mobile)
 
 @app.route("/about")
@@ -70,10 +87,11 @@ def login():
 		pid = user.id
 		if user and bcrypt.check_password_hash(user.password, form.password.data):
 			login_user(user, remember=form.remember.data)
-			next_page = request.args.get('next')
-			if not is_safe_url(next_page):
-				return flask.abort(400)
-			return redirect(next_page) if next_page else redirect(url_for('home'))
+			#next_page = request.args.get('next')
+			return redirect(url_for('home'))
+			#if not is_safe_url(next_page):
+			#		return flask.abort(400)
+			#return redirect(next_page) if next_page else redirect(url_for('home'))
 		else:
 			flash('Login Unsuccessful. Please check email and password', 'danger')
 	# return render_template(url_for('login'), title="Login", form = form)
@@ -101,11 +119,11 @@ def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		user = User(username = form.username.data, email = form.email.data, password = hashed_password)
+		user = User(username = form.username.data, email = form.email.data, password = hashed_password, zipcode = form.zipcode.data)
 		db.session.add(user)
 		db.session.commit()
 		# Insert row to Mongo DB parent_id 
-		inserted_id = ins_parent_id (user.id, form.zipcode.data)
+		#inserted_id = ins_parent_id (user.id, form.zipcode.data)
 		path = os.path.join(parent_dir, form.username.data)
 		try:
 			os.makedirs(path, exist_ok = True)
@@ -199,7 +217,7 @@ def add_child():
 		print (mydict)
 		mycol.insert_one(mydict)
 		flash('Child data has been added.', 'success')
-		return redirect(url_for('account'))
+		return redirect(url_for('home'))
 	elif request.method == 'GET':
 		return render_template("public/add_child.html", form = form)
 
@@ -289,6 +307,12 @@ def testdate():
 		msg = "Test Date is " + date
 		flash(msg)
 		cid = request.form.get('child')
+		if cid == "":
+			children = find_child(current_user.id)
+			#print("Children", children)
+			child_num = len(children)
+			msg = "Please select a child who worked on the worksheet."
+			return render_template("public/testdate.html", title="Test Date", form = form, children = children, child_num = child_num, msg = msg)
 		#path = os.path.join(parent_dir, "uploads", current_user.username, date)
 		path = os.path.join(app.root_path, 'static/img/upload/', current_user.username, date)
 		#print("Path:", path)
@@ -302,8 +326,14 @@ def testdate():
 		return redirect(url_for('upload_files'))
 	elif request.method == 'GET':
 		children = find_child(current_user.id)
+		#print("Children", children)
 		child_num = len(children)
-		return render_template("public/testdate.html", title="Test Date", form = form, children = children, child_num = child_num)
+		print("children", children, " child_number", child_num)
+		msg = ""
+		if child_num == 0:
+			return render_template("public/add_child.html", form = form)
+		else:
+			return render_template("public/testdate.html", title="Test Date", form = form, children = children, child_num = child_num, msg = msg)
 	else:
 		flash('Else')
 		return render_template("public/testdate.html", title="Test Date", form = form)
@@ -570,7 +600,7 @@ def evaluate_answer(areas, im_out, img, form_id):
 				cell_eval["answer"] = area["answer"][row][col]; cell_eval["miss_recog"]= False
 				cell_eval["match"] = True
 				cell_eval["op"]= str(q_col[row]) + " " + op + " " + str(q_row[col])
-				print("q_row: ",q_row, " q_col: ", q_col)
+				#print("q_row: ",q_row, " q_col: ", q_col)
 				#if pred == area["answer"][row][col]:
 				#    cell_eval["match"] = True
 				#else:
