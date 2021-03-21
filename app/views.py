@@ -124,12 +124,12 @@ def register():
 		db.session.commit()
 		# Insert row to Mongo DB parent_id 
 		#inserted_id = ins_parent_id (user.id, form.zipcode.data)
-		path = os.path.join(parent_dir, form.username.data)
-		try:
-			os.makedirs(path, exist_ok = True)
-			print("Directry '%s' created successfully" %form.username.data)
-		except OSError as error:
-			print("Directory 's%' can not be created")
+		#path = os.path.join(parent_dir, 'static/img/upload/', form.username.data)
+		#try:
+		#	os.makedirs(path, exist_ok = True)
+		#	print("Directry '%s' created successfully" %form.username.data)
+		#except OSError as error:
+		#	print("Directory 's%' can not be created")
 		flash('Your account has been created. You are able to login.', 'success')
 		return redirect(url_for("login"))
 	return render_template('public/registration.html', title="Register", form = form)
