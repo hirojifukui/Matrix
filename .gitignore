@@ -2,3 +2,5 @@
 eval_result.docx
 get-pip.py
 /app/static/img/upload
+/alembicgit
+*.ini

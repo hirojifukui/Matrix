@@ -41,16 +41,18 @@ path = ""; secure_files = []; form_id =""; browser=""; mobile = False; pid = 0; 
 
 @app.route("/")
 def index():
-	headers = requests.utils.default_headers()
-	ua = parse(headers['User-Agent'])
-	print (ua.os.family)
+	#headers = requests.utils.default_headers()
+	#ua = parse(headers['User-Agent'])
+	ua = request.user_agent
+	print(ua.platform)
+	#print (ua.os.family)
 	if current_user.is_authenticated:
 		children = find_child(current_user.id)
 		#print("Children", children)
 		child_num = len(children)
 		if child_num == 0:
 			return render_template("public/add_child.html", form = form)
-	if ua.os.family == 'iOS' or 'Android':
+	if ua.platform == 'iOS' or 'Android':
 		mobile = True
 	else: 
 		mobile = False
