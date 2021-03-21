@@ -52,11 +52,11 @@ def index():
 		child_num = len(children)
 		if child_num == 0:
 			return render_template("public/add_child.html", form = form)
-	if ua.platform == 'iOS' or 'Android':
-		mobile = True
-	else: 
-		mobile = False
-	return render_template("public/index.html", mobile = ua.os.family)
+	#if ua.platform == 'iphone' or 'android':
+	#	mobile = True
+	#else: 
+	#	mobile = False
+	return render_template("public/index.html", mobile = ua.platform)
 
 @app.route("/home")
 def home():

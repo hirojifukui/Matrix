@@ -22,9 +22,9 @@
     <div class="col">
       <img src = "static/img/header.png" alt="A header image" width = 100%></br>
         {% if current_user.is_authenticated %}
-          {% if mobile == 'iOS' %}
+          {% if mobile == 'iphone' %}
             <h4><a href="{{ url_for ('scan') }}">Scan a Worksheet</a></h4>
-          {% elif mobile == 'Android' %}
+          {% elif mobile == 'android' %}
             <h4><a href="{{ url_for ('scan') }}">Scan a Worksheet</a></h4>
           {% else %}
             <h4><a href="{{ url_for ('testdate') }}">Score a worksheet</a></h4>
